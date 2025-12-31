@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(realpath $0)"
 SCRIPT_DIR="$(dirname $SCRIPT_PATH)"
-ALIAS_COMMAND="cd $SCRIPT_DIR && sudo python main.py -i wlan0 -K"
+ALIAS_COMMAND="cd $SCRIPT_DIR && bash wifux.sh"
 
 # Detect shell config file
 if [ -n "$ZSH_VERSION" ]; then

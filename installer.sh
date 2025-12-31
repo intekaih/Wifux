@@ -15,10 +15,12 @@ echo -e "\033[1;32m[+] Installing Python dependencies…\033[0m"
 pip install -r requirements.txt
 
 chmod +x main.py
+chmod +x wifux.sh
+chmod +x banner.py
 
 # Setup alias
 SCRIPT_DIR="$(pwd)"
-ALIAS_COMMAND="cd $SCRIPT_DIR && sudo python main.py -i wlan0 -K"
+ALIAS_COMMAND="cd $SCRIPT_DIR && bash wifux.sh"
 
 # Detect shell config
 if [ -n "$ZSH_VERSION" ]; then
