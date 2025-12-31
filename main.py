@@ -22,10 +22,6 @@ class SafeDict(dict):
             return ''
         return super().get(key, default)
 
-# Override dict in __builtins__ to use SafeDict
-_original_dict = dict
-builtins.dict = SafeDict
-
 # Wrapper for exec to handle KeyError
 def _safe_exec_wrapper(code_obj, globals_dict=None, locals_dict=None):
     """Wrapper to handle KeyError for 'ESSID' during execution"""
@@ -34,12 +30,23 @@ def _safe_exec_wrapper(code_obj, globals_dict=None, locals_dict=None):
     if locals_dict is None:
         locals_dict = globals_dict
     
-    # Ensure dict is SafeDict in the execution context
+    # Inject SafeDict into execution context only (don't override builtins.dict)
+    # This way it won't affect Python standard library imports
     if '__builtins__' in globals_dict:
         if isinstance(globals_dict['__builtins__'], dict):
-            globals_dict['__builtins__']['dict'] = SafeDict
+            # Create a copy of __builtins__ dict to avoid modifying the original
+            _builtins_copy = globals_dict['__builtins__'].copy()
+            _builtins_copy['dict'] = SafeDict
+            globals_dict['__builtins__'] = _builtins_copy
     else:
-        globals_dict['__builtins__'] = builtins
+        # Create a new dict with SafeDict, but keep original builtins intact
+        _builtins_dict = {}
+        _builtins_dict.update(builtins.__dict__)
+        _builtins_dict['dict'] = SafeDict
+        globals_dict['__builtins__'] = _builtins_dict
+    
+    # Also inject SafeDict directly into globals
+    globals_dict['dict'] = SafeDict
     
     try:
         return exec(code_obj, globals_dict, locals_dict)
