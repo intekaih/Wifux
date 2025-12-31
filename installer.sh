@@ -8,8 +8,8 @@ pkg install root-repo -y
 pkg install git tsu python wpa-supplicant pixiewps iw -y
 
 echo -e "\033[1;32m[+] Cloning WiFuX repository…\033[0m"
-git clone https://github.com/msrofficial/WiFuX
-cd WiFuX || exit
+git clone https://github.com/intekaih/Wifux.git
+cd Wifux || exit
 
 echo -e "\033[1;32m[+] Installing Python dependencies…\033[0m"
 pip install -r requirements.txt
